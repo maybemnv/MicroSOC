@@ -5,7 +5,7 @@ from app.services import gemini_service, decision_engine
 from app.schemas.log import LogIngest
 from app.schemas.alert import AlertCreate
 from app.db import models, crud
-from app.api.endpoints.dashboard import get_db
+from app.api.deps import get_db
 
 
 router = APIRouter()
