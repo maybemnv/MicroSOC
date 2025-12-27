@@ -1,0 +1,10 @@
+[ ] Google Cloud Project created, billing enabled (₹2k free credit)
+[ ] Chronicle enabled, service account with roles/chronicle.editor
+[ ] Gemini API key in Secret Manager (gcloud secrets create gemini-key)
+[ ] ADK installed: pip install google-adk
+[ ] pfSense VM spun up (or use demo.pfsense.org API)
+[ ] Twilio trial account, phone number purchased
+[ ] Git repo initialized: git init && git add .
+[ ] Mock data files created in data/mocks/
+[ ] Database schema applied to Cloud SQL
+[ ] Decision log (above) printed & taped to wall

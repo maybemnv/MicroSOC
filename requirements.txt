@@ -1,0 +1,8 @@
+langgraph
+google-adk
+langchain
+fastapi
+uvicorn
+google.genai
+twilio
+python-dotenv
