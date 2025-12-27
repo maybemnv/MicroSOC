@@ -1,8 +1,12 @@
-langgraph
-google-adk
-langchain
 fastapi
 uvicorn
-google.genai
-twilio
+pydantic
+pydantic-settings
+sqlalchemy
+alembic
+psycopg2-binary
+google-generativeai
+google-cloud-logging
 python-dotenv
+requests
+twilio

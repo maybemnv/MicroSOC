@@ -1,10 +1,152 @@
-[ ] Google Cloud Project created, billing enabled (₹2k free credit)
-[ ] Chronicle enabled, service account with roles/chronicle.editor
-[ ] Gemini API key in Secret Manager (gcloud secrets create gemini-key)
-[ ] ADK installed: pip install google-adk
-[ ] pfSense VM spun up (or use demo.pfsense.org API)
-[ ] Twilio trial account, phone number purchased
-[ ] Git repo initialized: git init && git add .
-[ ] Mock data files created in data/mocks/
-[ ] Database schema applied to Cloud SQL
-[ ] Decision log (above) printed & taped to wall
+⏰ HOUR 1: Foundation & Setup (60 min)
+Setup (15 min)
+
+ Create project directory structure
+ Initialize git repo
+ Setup Python virtual environment
+ Install core dependencies (FastAPI, Google ADK, Gemini SDK, PostgreSQL)
+ Create .env file with API keys (Gemini, GCP credentials)
+ Setup PostgreSQL database locally
+
+Database Schema (15 min)
+
+ Create alerts table (id, timestamp, source, severity, status, mitre_ttp, explanation)
+ Create actions table (id, alert_id, action_taken, success, executor, timestamp)
+ Create users table (id, email, role, phone)
+ Write basic CRUD functions for each table
+ Test DB connection and insert dummy data
+
+Backend API Skeleton (30 min)
+
+ Create FastAPI app structure
+ Build POST /logs/ingest endpoint (accept JSON logs)
+ Build POST /analyze endpoint (placeholder)
+ Build POST /decision endpoint (placeholder)
+ Build POST /action endpoint (placeholder)
+ Build GET /incidents endpoint (query alerts from DB)
+ Test all endpoints with Postman/curl
+
+
+⏰ HOUR 2: AI Core - Gemini Analysis (60 min)
+Gemini Integration (25 min)
+
+ Create analyzer.py with Gemini client initialization
+ Write prompt template for log analysis (identify threat, explain in plain English, suggest MITRE ATT&CK)
+ Build function: analyze_log(log_data) -> {threat_type, severity, explanation, mitre_ttp}
+ Wire Gemini function to /analyze endpoint
+ Test with sample malicious logs (failed login, suspicious IP, lateral movement)
+
+Risk Scoring Logic (15 min)
+
+ Create scoring function: map keywords → severity (Low/Medium/High)
+ Rules: "brute force" = High, "anomaly" = Medium, "info" = Low
+ Add risk score to DB insert
+ Test scoring with 5 different log types
+
+Mock Log Generator (20 min)
+
+ Create mock_logs.py to simulate Chronicle/G Workspace logs
+ Generate 10 log types: failed login, firewall block, phishing email, privilege escalation, etc.
+ Add timestamp, source IP, user, action fields
+ Create /simulate endpoint to auto-generate and ingest logs
+
+
+⏰ HOUR 3: ADK Agent + Response Actions (60 min)
+ADK Decision Agent (30 min)
+
+ Create decision_agent.py using Google ADK
+ Define decision logic: if severity == "High" → trigger containment
+ Implement action selector: "block_ip", "disable_user", "quarantine_email"
+ Connect agent to /decision endpoint
+ Log all decisions to actions table
+
+Simulated Response Actions (20 min)
+
+ Create responder.py with mock functions:
+
+ block_ip_pfsense(ip) → return success message
+ disable_user_gsuite(email) → return success message
+ quarantine_email(msg_id) → return success message
+
+
+ Wire responder to /action endpoint
+ Test full flow: ingest → analyze → decide → act
+
+Integration Test (10 min)
+
+ Run end-to-end test: submit malicious log → verify action taken
+ Check DB for alert + action records
+ Verify JSON response includes explanation + action
+
+
+⏰ HOUR 4: Dashboard + Demo Prep (60 min)
+Frontend Dashboard (35 min)
+
+ Create Next.js app (npx create-next-app)
+ Install Tailwind CSS and Chart.js
+ Build single-page dashboard with 3 sections:
+
+ Live Alerts Feed (fetch /incidents, show last 10)
+ Threat Severity Chart (pie chart: High/Medium/Low count)
+ Action Buttons ("Simulate Attack", "Contain Threat")
+
+
+ Style with dark theme + red/yellow/green severity colors
+ Add auto-refresh every 5 seconds for live feed
+
+Demo Scenario (15 min)
+
+ Create demo script:
+
+Show empty dashboard
+Click "Simulate Attack" → trigger 3 malicious logs
+Watch alerts appear in real-time
+Show AI explanation for one alert
+Click "Contain Threat" → show action confirmation
+
+
+ Test demo flow 2 times
+ Take screenshots for presentation
+
+Final Polish (10 min)
+
+ Add loading spinners to dashboard
+ Add toast notifications for actions
+ Write 1-page README with architecture diagram (copy from docs)
+ Commit all code to GitHub
+ Deploy backend to localhost (or Cloud Run if time permits)
+
+
+🎯 CRITICAL PATH (If Running Late)
+Priority 1 (Must Have):
+
+Log ingestion → Gemini analysis → DB storage → Dashboard display
+
+Priority 2 (Nice to Have):
+
+ADK decision agent
+Mock response actions
+
+Priority 3 (Skip if needed):
+
+Chart.js visualizations
+Auto-refresh
+Cloud deployment
+
+
+✅ Pre-Demo Checklist (Final 5 min)
+
+ Backend running on localhost:8000
+ Frontend running on localhost:3000
+ Database has 0 alerts (fresh start)
+ Gemini API key valid and tested
+ Demo script printed/memorized
+ Browser tabs ready (dashboard, Postman for API calls)
+
+
+🚀 Post-Completion (If Time Remains)
+
+ Add Hinglish voice alert using Google TTS
+ Add email notification via SendGrid
+ Deploy to Cloud Run
+ Record demo video
