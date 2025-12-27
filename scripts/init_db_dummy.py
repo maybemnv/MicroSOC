@@ -1,7 +1,7 @@
 import sys
 import os
 # Add the project root to python path to import app modules
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src', 'backend'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from app.db import session, models, crud
 from app.schemas import alert as alert_schema

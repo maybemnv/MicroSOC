@@ -1,0 +1,66 @@
+# MicroSOC: Work Done Report
+
+## ✅ Completed Modules
+
+### 1. Foundation & Architecture
+- **Structure**: Modular FastAPI backend (`src/backend/app`), separated into routing, services, and database layers.
+- **Database**: PostgreSQL-ready schema using SQLAlchemy.
+  - Tables: `alerts` (incidents), `actions` (responses), `users`.
+  - CRUD: operations implemented in `app/db/crud.py`.
+- **Config**: Pydantic-based settings management handling API keys (`.env`).
+
+### 2. AI Core (The Brain)
+- **Integration**: `gemini_service.py` connects to Google's Gemini 2.5 Flash.
+- **Analysis**:
+  - Ingests raw JSON logs.
+  - Determines Severity (Low/Medium/High).
+  - Maps to MITRE ATT&CK TTPs.
+  - Provides plain English explanations of threats.
+- **Validation**: Test scripts confirm valid JSON output from the LLM.
+
+### 3. ADK Agents (The Hands)
+- **Orchestrator**: `decision_engine.py` evaluates alerts.
+  - Logic: If Severity == "High", auto-trigger response.
+- **Responders**: Simulated integrations.
+  - `block_ip_pfsense`: Mock firewall block.
+  - `disable_user_gsuite`: Mock user suspension.
+- **End-to-End**: The `/ingest` endpoint now runs the full pipeline: Ingest -> Analyze -> Store -> Respond.
+
+### 4. Simulation Tools
+- **Mock Generator**: `mock_log_generator.py` creates realistic security logs (Ransomware, Brute Force).
+- **Attack Script**: `scripts/simulate_attacks.py` fires a sequence of attacks at the API to verify the system.
+
+---
+
+## 🛠 Setup Instructions
+
+1. **Environment Variables**:
+   Ensure your `.env` file has:
+   ```env
+   GOOGLE_API_KEY=your_gemini_key
+   # DATABASE_URL=postgresql://... (Optional, defaults to local SQLite)
+   ```
+
+2. **Run the Backend**:
+   ```bash
+   uv run python main.py
+   ```
+   *Server runs at http://localhost:8000*
+
+3. **Verify System**:
+   Run the simulation script:
+   ```bash
+   uv run python scripts/simulate_attacks.py
+   ```
+   *Check the terminal output for "Alert ID" and "Action Taken".*
+
+---
+
+## 🔮 What's Next? (Remaining Work)
+
+1. **Frontend Dashboard**:
+   - Creating the Next.js application.
+   - Connecting to the `/incidents` API to show live alerts.
+2. **Demo Polish**:
+   - Refining the "High Severity" prompt for better explanations.
+   - Ensuring the demo scenarios look impressive.
